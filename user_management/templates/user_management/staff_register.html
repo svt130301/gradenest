@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Staff Registration{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-success text-white text-center py-3 rounded-top">
+            <h4 class="mb-0 fw-bold">Staff Registration</h4>
+        </div>
+
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data" class="row g-3">
+                {% csrf_token %}
+                
+                <!-- Account Information -->
+                <h5 class="text-secondary mt-3">Account Information</h5>
+                {% for field in user_form %}
+                    <div class="col-md-6">
+                        <label class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger small">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                
+                <!-- Staff Details -->
+                <h5 class="text-secondary mt-4">Staff Details</h5>
+                {% for field in staff_form %}
+                    <div class="col-md-6 staff-field" id="field-{{ field.name }}">
+                        <label class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger small">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <div class="col-12 text-center mt-4">
+                    <button type="submit" class="btn btn-success px-4 py-2">Register Staff</button>
+                    <a href="{% url 'user_management:user_list' %}" class="btn btn-secondary px-4 py-2 ms-2">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// Function to hide/show Program & Department
+function toggleStaffFields() {
+    const roleSelect = document.querySelector('select[name="role"]');
+    const programField = document.getElementById('field-program');
+    const deptField = document.getElementById('field-department');
+
+    if (!roleSelect) return; // safety check
+
+    const selectedRole = roleSelect.value;
+
+    if (selectedRole === 'OfficeStaff') {
+        if (programField) programField.style.display = 'none';
+        if (deptField) deptField.style.display = 'none';
+    } else {
+        if (programField) programField.style.display = 'block';
+        if (deptField) deptField.style.display = 'block';
+    }
+}
+
+// Initialize when page loads and when role changes
+document.addEventListener('DOMContentLoaded', function () {
+    const roleSelect = document.querySelector('select[name="role"]');
+    if (roleSelect) {
+        toggleStaffFields();  // check initial selection
+        roleSelect.addEventListener('change', toggleStaffFields);
+    }
+});
+</script>
+{% endblock %}
+

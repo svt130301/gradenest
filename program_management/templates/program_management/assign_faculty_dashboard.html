@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load custom_filters %}
+{% block title %}Assign Faculty{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3 text-center">Assign Faculty to Subjects</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table class="table table-striped align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Program</th>
+                        <th>Subject</th>
+                        <th>Semester</th>
+                        <th>Assigned Faculty</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subject in subjects %}
+                        {% with teacher=assignment_map|dictget:subject.id %}
+                        <tr>
+                            <td>{{ subject.program.name }}</td>
+                            <td>{{ subject.name }}</td>
+                            <td>{{ subject.semester }}</td>
+                            <td>
+                                {% if teacher %}
+                                    <strong>{{ teacher.get_full_name|default:teacher.username }}</strong><br>
+                                    <small class="text-muted">
+                                        {{ teacher.staff_profile.designation|default:"-" }}
+                                    </small>
+                                {% else %}
+                                    <span class="text-muted">Unassigned</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'program_management:assign_faculty' subject.id %}" 
+                                   class="btn btn-primary btn-sm">Assign / Change</a>
+                            </td>
+                        </tr>
+                        {% endwith %}
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">No subjects found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

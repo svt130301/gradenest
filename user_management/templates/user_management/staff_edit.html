@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Edit Staff{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-primary text-white text-center py-3 rounded-top">
+            <h4 class="mb-0 fw-bold">Edit Staff</h4>
+        </div>
+
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data" class="row g-3">
+                {% csrf_token %}
+                
+                <!-- Account Information -->
+                <h5 class="text-secondary mt-3">Account Information</h5>
+                {% for field in user_form %}
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger small">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                
+                <!-- Staff Details -->
+                <h5 class="text-secondary mt-4">Staff Details</h5>
+                {% for field in profile_form %}
+                    <div class="col-md-6 staff-field" id="field_{{ field.name }}">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger small">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <div class="col-12 text-center mt-4">
+                    <button type="submit" class="btn btn-primary px-4 py-2">Save Changes</button>
+                    <a href="{% url 'user_management:user_list' %}" class="btn btn-secondary px-4 py-2 ms-2">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to Hide/Show Fields Based on Role -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const roleSelect = document.querySelector('select[name="role"]');
+    const programField = document.getElementById("field_program");
+    const departmentField = document.getElementById("field_department");
+
+    function toggleFields() {
+        if (roleSelect && roleSelect.value === "OfficeStaff") {
+            if (programField) programField.style.display = "none";
+            if (departmentField) departmentField.style.display = "none";
+        } else {
+            if (programField) programField.style.display = "block";
+            if (departmentField) departmentField.style.display = "block";
+        }
+    }
+
+    if (roleSelect) {
+        roleSelect.addEventListener("change", toggleFields);
+        toggleFields(); // Initial load
+    }
+});
+</script>
+{% endblock %}
+

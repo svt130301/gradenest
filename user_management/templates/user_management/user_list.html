@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Manage Users{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3">User List</h2>
+    <a href="{% url 'user_management:add_user_choice' %}" class="btn btn-primary mb-3">Add User</a>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            {% with staff=user.staff_profile %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    {% if user.userprofile.role %}
+                        {{ user.userprofile.get_role_display }}
+                    {% else %}
+                        <span class="text-muted">No Role</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'user_management:edit_user' user.id %}" class="btn btn-primary btn-sm">Edit</a>
+                    <a href="{% url 'user_management:delete_user' user.id %}" class="btn btn-danger btn-sm">Delete</a>
+
+                  {% if user.userprofile.role == "Teacher" %}
+    		     {% if staff %}
+        		{% if staff.department %}
+            		<form action="{% url 'user_management:make_hod' user.id %}" method="post" style="display:inline;">
+                	{% csrf_token %}
+                	{% if staff.department.hod and staff.department.hod.user == user %}
+                    	<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to remove HOD?');">
+                        Remove HOD
+                    	</button>
+                	{% else %}
+                    	<button type="submit" class="btn btn-warning btn-sm">
+                        Make HOD
+                    	</button>
+                      {% endif %}
+            		</form>
+        	    {% else %}
+            	    <span class="text-muted">No Department</span>
+        	{% endif %}
+    		{% else %}
+        	<span class="text-muted">No Staff Profile</span>
+    		{% endif %}
+	{% endif %}
+
+                </td>
+            </tr>
+            {% endwith %}
+        {% empty %}
+            <tr>
+                <td colspan="6" class="text-center text-muted">No users found.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+

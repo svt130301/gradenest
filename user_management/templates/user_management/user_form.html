@@ -1,0 +1,50 @@
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-6">
+            {{ user_form.username.label_tag }}
+            {{ user_form.username }}
+        </div>
+        <div class="col-md-6">
+            {{ user_form.email.label_tag }}
+            {{ user_form.email }}
+        </div>
+        <div class="col-md-6">
+            {{ user_form.first_name.label_tag }}
+            {{ user_form.first_name }}
+        </div>
+        <div class="col-md-6">
+            {{ user_form.last_name.label_tag }}
+            {{ user_form.last_name }}
+        </div>
+        <div class="col-md-6">
+            {{ user_form.password.label_tag }}
+            {{ user_form.password }}
+        </div>
+        <div class="col-md-6">
+            {{ user_form.confirm_password.label_tag }}
+            {{ user_form.confirm_password }}
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Profile Fields -->
+    <div class="row">
+        {% for field in profile_form %}
+        <div class="col-md-6">
+            <label>{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+            <div class="text-danger small">{{ field.errors }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-success px-4">Save Changes</button>
+        <a href="{% url 'user_management:user_list' %}" class="btn btn-secondary px-4 ms-2">Cancel</a>
+    </div>
+</form>
+

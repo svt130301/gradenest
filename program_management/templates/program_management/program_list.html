@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Programs{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3 text-center">Programs</h2>
+
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{% url 'program_management:program_add' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Add Program
+        </a>
+    </div>
+
+    <table class="table table-bordered table-striped shadow-sm">
+        <thead class="table-dark text-center">
+            <tr>
+                <th>#</th>
+                <th>Program Name</th>
+                <th>Number of Years</th>
+                <th>Semesters</th> 
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for program in programs %}
+            <tr class="align-middle">
+                <td class="text-center">{{ forloop.counter }}</td>
+                <td>{{ program.name }}</td>
+                <td class="text-center">{{ program.num_years }}</td>
+                <td class="text-center">{{ program.num_semesters }}</td> 
+                <td>{{ program.description|default:"-" }}</td>
+                <td class="text-center">
+                    <!-- View Students Button -->
+                    <a href="{% url 'program_management:program_students' program.id %}" 
+                       class="btn btn-sm btn-success">
+                       Students
+                    </a>
+                    
+                    <!-- Existing Buttons -->
+                    <a href="{% url 'program_management:subject_list' program.id %}" 
+   		       class="btn btn-sm btn-info">Subjects</a>
+                    <a href="{% url 'program_management:program_edit' program.id %}" 
+                       class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{% url 'program_management:program_delete' program.id %}" 
+                       class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="6" class="text-center text-muted">No programs found.</td> 
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+

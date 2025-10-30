@@ -1,0 +1,47 @@
+{% extends "accounts/base.html" %}
+{% block title %}Promote Students{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3 text-center">Promote Students</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <p>Click the button below to promote all eligible students to their next semester.</p>
+        <div class="text-center mb-3">
+            <button type="submit" class="btn btn-success">Promote All Students</button>
+        </div>
+    </form>
+
+    <table class="table table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Student</th>
+                <th>Program</th>
+                <th>Current Semester</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+                <tr>
+                    <td>{{ student.user.get_full_name|default:student.user.username }}</td>
+                    <td>{{ student.program.name }}</td>
+                    <td>{{ student.semester }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="3" class="text-center text-muted">No students found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+

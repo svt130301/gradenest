@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}{{ form_title }}{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h3>{{ form_title }}</h3>
+    <form method="post" class="p-3 bg-dark text-light rounded shadow">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form.username.label_tag }} {{ form.username }}
+        </div>
+        <div class="mb-3">
+            {{ form.email.label_tag }} {{ form.email }}
+        </div>
+        <div class="mb-3">
+            {{ form.password.label_tag }} {{ form.password }}
+        </div>
+        <div class="mb-3">
+            {{ form.role.label_tag }} {{ form.role }}
+        </div>
+        {% if form.is_hod.is_hidden == False %}
+        <div class="mb-3">
+            {{ form.is_hod.label_tag }} {{ form.is_hod }}
+        </div>
+        {% endif %}
+        {% if form.program.is_hidden == False %}
+        <div class="mb-3">
+            {{ form.program.label_tag }} {{ form.program }}
+        </div>
+        {% endif %}
+        {% if form.parent_email.is_hidden == False %}
+        <div class="mb-3">
+            {{ form.parent_email.label_tag }} {{ form.parent_email }}
+        </div>
+        {% endif %}
+        <button type="submit" class="btn btn-success">Save</button>
+    </form>
+</div>
+{% endblock %}
+

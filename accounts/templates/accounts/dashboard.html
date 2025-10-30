@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Welcome, {{ user.username }}!</h2>
+        <p class="text-muted">Role: {{ user.userprofile.role.name }}</p>
+    </div>
+
+    <div class="row justify-content-center g-4">
+        {% if user.userprofile.role.name == 'Admin' %}
+            <!-- Manage Users -->
+            <div class="col-md-4">
+                <div class="card shadow border-0 rounded-3 text-center h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3">Manage Users</h5>
+                        <p class="text-muted">Add or remove users, assign roles.</p>
+                        <a href="{% url 'user_management:user_list' %}" class="btn btn-dark w-100">Open</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manage Programs -->
+            <div class="col-md-4">
+                <div class="card shadow border-0 rounded-3 text-center h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3">Manage Programs</h5>
+                        <p class="text-muted">Add and manage programs & subjects.</p>
+                        <a href="{% url 'program_list' %}" class="btn btn-dark w-100">Open</a>
+                    </div>
+                </div>
+            </div>
+
+        {% elif user.userprofile.role.name == 'Teacher' %}
+            <div class="col-md-4">
+                <div class="card shadow border-0 rounded-3 text-center h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3">Marks Management</h5>
+                        <p class="text-muted">Manage internal assessments and grades.</p>
+                        <a href="#" class="btn btn-dark w-100">Open</a>
+                    </div>
+                </div>
+            </div>
+             <!-- Faculty Assignment -->
+            <div class="col-md-4">
+                <div class="card shadow border-0 rounded-3 text-center h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3">Faculty Assignment</h5>
+                        <p class="text-muted">Assign faculty to courses.</p>
+                        <a href="{% url 'assign_faculty' %}" class="btn btn-dark w-100">Open</a>
+                    </div>
+                </div>
+            </div>
+
+        {% elif user.userprofile.role.name == 'OfficeStaff' %}
+            <div class="col-md-4">
+                <div class="card shadow border-0 rounded-3 text-center h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3">Faculty Assignment</h5>
+                        <p class="text-muted">Assign faculty to subjects.</p>
+                        <a href="{% url 'assign_faculty' %}" class="btn btn-dark w-100">Open</a>
+                    </div>
+                </div>
+            </div>
+
+        {% elif user.userprofile.role.name == 'Student' %}
+            <div class="col-md-4">
+                <div class="card shadow border-0 rounded-3 text-center h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3">Performance Reports</h5>
+                        <p class="text-muted">View your academic progress and marks.</p>
+                        <a href="#" class="btn btn-dark w-100">View</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

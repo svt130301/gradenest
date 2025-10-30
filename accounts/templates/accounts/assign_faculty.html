@@ -1,0 +1,62 @@
+{% extends "accounts/base.html" %}
+
+{% block title %}Assign Faculty{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3 text-light">Assign Faculty for {{ program.name }}</h2>
+    <p class="text-muted">Select a teacher for each subject in this program.</p>
+
+    <table class="table table-dark table-hover align-middle rounded">
+        <thead>
+            <tr>
+                <th>Subject Code</th>
+                <th>Subject Name</th>
+                <th>Semester</th>
+                <th>Assigned Faculty</th>
+                <th>Change Assignment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subject in subjects %}
+                <tr>
+                    <td>{{ subject.code }}</td>
+                    <td>{{ subject.name }}</td>
+                    <td>{{ subject.semester }}</td>
+                    <td>
+                        {% with assignment=subject.facultyassignment_set.first %}
+                            {% if assignment %}
+                                {{ assignment.teacher.user.first_name }} {{ assignment.teacher.user.last_name }}
+                            {% else %}
+                                <span class="text-secondary">Not Assigned</span>
+                            {% endif %}
+                        {% endwith %}
+                    </td>
+                    <td>
+                        <form method="POST" class="d-flex">
+                            {% csrf_token %}
+                            <input type="hidden" name="subject_id" value="{{ subject.id }}">
+                            <select name="teacher_id" class="form-select form-select-sm me-2">
+                                <option value="">-- Select Teacher --</option>
+                                {% for teacher in teachers %}
+                                    <option value="{{ teacher.id }}">{{ teacher.user.first_name }} {{ teacher.user.last_name }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn btn-primary btn-sm">Assign</button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">No subjects found for this program.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="mt-4">
+        <a href="{% url 'subject_list' program.id %}" class="btn btn-outline-light">← Back to Subjects</a>
+    </div>
+</div>
+{% endblock %}
+

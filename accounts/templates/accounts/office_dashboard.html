@@ -1,0 +1,61 @@
+{% extends 'accounts/base.html' %}
+{% block title %}Office Staff Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Welcome, {{ user.first_name|default:user.username }}!</h2>
+        <p class="text-muted">Role: Office Staff</p>
+    </div>
+
+    <!-- Office Staff Controls -->
+    <div class="card shadow border-0 mb-4 rounded-3">
+        <div class="card-header bg-dark text-white fw-bold">
+            Office Staff Controls
+        </div>
+        <div class="card-body">
+            <p class="text-muted">
+                You are responsible for maintaining student records and promoting them
+                to the next semester when eligible.
+            </p>
+            <a href="{% url 'program_management:promote_students' %}" class="btn btn-primary">
+                Promote Students
+            </a>
+        </div>
+    </div>
+
+    <!-- Students Overview -->
+    <div class="card shadow border-0 rounded-3">
+        <div class="card-header bg-secondary text-white fw-bold">
+            Current Students Overview
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped table-hover mb-0 text-center align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Program</th>
+                        <th>Name</th>
+                        <th>Semester</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if students %}
+                        {% for student in students %}
+                            <tr>
+                                <td>{{ student.program.name }}</td>
+                                <td>{{ student.user.first_name }} {{ student.user.last_name }}</td>
+                                <td>{{ student.semester }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="3" class="text-muted">No students found.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

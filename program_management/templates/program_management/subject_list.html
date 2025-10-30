@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Subjects{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3 text-center">Subjects in {{ program.name }}</h2>
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{% url 'program_management:subject_add' program.id %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Add Subject
+        </a>
+    </div>
+
+    <table class="table table-bordered table-striped shadow-sm">
+        <thead class="table-dark text-center">
+            <tr>
+                <th>#</th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Semester</th>
+                <th>Course Type</th>
+                <th>Credits</th>
+                <th>Internal</th>
+                <th>External</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for subject in subjects %}
+            <tr class="align-middle">
+                <td class="text-center">{{ forloop.counter }}</td>
+                <td>{{ subject.code }}</td>
+                <td>{{ subject.name }}</td>
+                <td class="text-center">{{ subject.semester }}</td>
+                <td class="text-center">{{ subject.get_course_type_display }}</td>
+                <td class="text-center">{{ subject.credits }}</td>
+                <td class="text-center">{{ subject.internal_marks }}</td>
+                <td class="text-center">{{ subject.external_marks }}</td>
+                <td class="text-center">{{ subject.total_marks }}</td>
+                <td class="text-center">
+                    <a href="{% url 'program_management:subject_edit' subject.id %}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{% url 'program_management:subject_delete' subject.id %}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="10" class="text-center text-muted">No subjects found.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+

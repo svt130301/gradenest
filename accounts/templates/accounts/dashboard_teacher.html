@@ -1,0 +1,54 @@
+{% extends 'accounts/base.html' %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="mb-3">Welcome, {{ user.get_full_name|default:user.username }}</h3>
+
+    <!-- Teacher’s assigned subjects -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            My Assigned Subjects
+        </div>
+        <div class="card-body">
+            {% if assigned_subjects %}
+                <ul class="list-group">
+                    {% for subject in assigned_subjects %}
+                        <li class="list-group-item">
+                            {{ subject.subject.code }} - {{ subject.subject.name }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">No subjects assigned yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- HOD-exclusive section -->
+    {% if hod_mode %}
+    <div class="card border-warning">
+        <div class="card-header bg-warning text-dark">
+            HOD Tools
+        </div>
+        <div class="card-body">
+            <p>You are the <strong>Head of Department</strong>.</p>
+            <a href="{% url 'assign_faculty' %}" class="btn btn-outline-warning">
+                Assign Faculty to Subjects
+            </a>
+
+            {% if subjects_in_dept %}
+                <hr>
+                <h5>Subjects in Your Department</h5>
+                <ul class="list-group">
+                    {% for s in subjects_in_dept %}
+                        <li class="list-group-item">{{ s.name }} (Sem {{ s.semester }})</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

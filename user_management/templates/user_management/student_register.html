@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Student Registration{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-primary text-white text-center py-3 rounded-top">
+            <h4 class="mb-0 fw-bold">Student Registration</h4>
+        </div>
+
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data" class="row g-3">
+                {% csrf_token %}
+
+                <!-- Account Info -->
+                <h5 class="text-secondary mt-3">Account Information</h5>
+                {% for field in user_form %}
+                    <div class="col-md-6">
+                        <label class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger small">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <!-- Student Info -->
+                <h5 class="text-secondary mt-4">Student Details</h5>
+                {% for field in student_form %}
+                    <div class="col-md-6" id="field-{{ field.name }}">
+                        <label class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger small">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+
+                <div class="col-12 text-center mt-4">
+                    <button type="submit" class="btn btn-success px-4 py-2">Register Student</button>
+                    <a href="{% url 'user_management:user_list' %}" class="btn btn-secondary px-4 py-2 ms-2">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Dynamic Bachelor% Visibility -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const programSelect = document.getElementById("id_program");
+    const bachelorField = document.getElementById("field-bachelor_percentage");
+
+    function toggleBachelorField() {
+        if (!programSelect) return;
+        const selectedText = programSelect.options[programSelect.selectedIndex]?.text?.toUpperCase() || "";
+
+        // Show bachelor% only for Master's programs
+        if (selectedText.includes("MCA") || selectedText.includes("MASTER")) {
+            bachelorField.style.display = "block";
+        } else {
+            bachelorField.style.display = "none";
+            const input = bachelorField.querySelector("input");
+            if (input) input.value = "";
+        }
+    }
+
+    if (programSelect) {
+        programSelect.addEventListener("change", toggleBachelorField);
+        toggleBachelorField();  // Run on page load
+    }
+});
+</script>
+{% endblock %}
+
