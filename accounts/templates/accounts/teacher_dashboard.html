@@ -25,6 +25,18 @@
         </div>
     </div>
 
+    <!-- Resource Management Section -->
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            Resource Management
+        </div>
+        <div class="card-body">
+            <a href="{% url 'resource_management:upload_question_paper' %}" class="btn btn-outline-success mb-2">Upload Question Papers</a>
+            <a href="{% url 'resource_management:upload_timetable' %}" class="btn btn-outline-primary mb-2">Upload Timetable</a>
+            <a href="{% url 'resource_management:notifications' %}" class="btn btn-outline-info mb-2">View Notifications</a>
+        </div>
+    </div>
+
     <!-- HOD-exclusive section -->
     {% if hod_mode %}
     <div class="card border-warning">

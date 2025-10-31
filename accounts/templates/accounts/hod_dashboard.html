@@ -5,46 +5,58 @@
 <div class="container mt-4">
   <h2 class="mb-4 text-center">Head of Department Dashboard</h2>
 
+  <!-- Top Section -->
   <div class="row mb-4">
     <div class="col-md-6">
-      <div class="card shadow-sm border-0">
-        <div class="card-body text-center">
-          <h5 class="card-title text-primary">Department Overview</h5>
-          <p><strong>Department:</strong> {{ department}}</p>
-          <p><strong>Total Teachers:</strong> {{ teachers.count }}</p>
-        </div>
+      <div class="card shadow-sm border-0 text-center p-3">
+        <h5 class="text-primary">Department Overview</h5>
+        <p><strong>Department:</strong> {{ department }}</p>
+        <p><strong>Total Teachers:</strong> {{ teachers.count }}</p>
       </div>
     </div>
 
     <div class="col-md-6">
-      <div class="card shadow-sm border-0">
-        <div class="card-body text-center">
-          <h5 class="card-title text-primary">Assign Faculty</h5>
-          <p>Assign teachers to subjects in your department’s program.</p>
-          <a href="{% url 'program_management:assign_faculty_dashboard' %}" class="btn btn-primary">Go to Assignment Page</a>
+      <div class="card shadow-sm border-0 text-center p-3">
+        <h5 class="text-primary">Assign Faculty</h5>
+        <p>Assign teachers to subjects in your department’s program.</p>
+        <a href="{% url 'program_management:assign_faculty_dashboard' %}" class="btn btn-primary">Go to Assignment Page</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resource Management Section -->
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <div class="card shadow-sm border-0 text-center p-3">
+        <h5 class="text-success">Resource Management</h5>
+        <p class="text-muted">Manage academic resources for your department.</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap mt-2">
+          <a href="{% url 'resource_management:upload_question_paper' %}" class="btn btn-outline-success">
+            <i class="bi bi-upload"></i> Upload Question Papers
+          </a>
+          <a href="{% url 'resource_management:notifications' %}" class="btn btn-outline-info">
+            <i class="bi bi-bell"></i> View Notifications
+          </a>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Bottom Section -->
   <div class="row">
     <div class="col-md-6">
-      <div class="card shadow-sm border-0">
-        <div class="card-body text-center">
-          <h5 class="card-title text-primary">View Subjects</h5>
-          <p>See subject lists and assigned faculty.</p>
-          <a href="{% url 'program_management:subject_list' %}" class="btn btn-secondary">View Subjects</a>
-        </div>
+      <div class="card shadow-sm border-0 text-center p-3">
+        <h5 class="text-primary">View Subjects</h5>
+        <p>See subject lists and assigned faculty.</p>
+        <a href="{% url 'program_management:subject_list' %}" class="btn btn-secondary">View Subjects</a>
       </div>
     </div>
 
     <div class="col-md-6">
-      <div class="card shadow-sm border-0">
-        <div class="card-body text-center">
-          <h5 class="card-title text-primary">Reports</h5>
-          <p>Generate reports and faculty allocation details.</p>
-          <a href="#" class="btn btn-outline-primary disabled">Coming Soon</a>
-        </div>
+      <div class="card shadow-sm border-0 text-center p-3">
+        <h5 class="text-primary">Reports</h5>
+        <p>Generate reports and faculty allocation details.</p>
+        <a href="#" class="btn btn-outline-primary disabled">Not done</a>
       </div>
     </div>
   </div>

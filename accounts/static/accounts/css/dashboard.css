@@ -1,0 +1,145 @@
+/* ==========================
+   DASHBOARD PAGE STYLING
+   ========================== */
+
+/* Page Container */
+.dashboard-container {
+    padding: 20px;
+}
+
+/* Dashboard Title */
+.dashboard-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+/* ==========================
+   DASHBOARD CARDS
+   ========================== */
+
+.dashboard-card {
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+    background: #fff;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    transition: all 0.2s ease-in-out;
+    text-align: center;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card h5 {
+    font-weight: 600;
+    color: #0d6efd;
+    margin-bottom: 10px;
+}
+
+.dashboard-card p {
+    color: #6c757d;
+    margin-bottom: 15px;
+}
+
+/* ==========================
+   BUTTONS
+   ========================== */
+
+.dashboard-card .btn {
+    border-radius: 6px;
+    font-weight: 500;
+    padding: 8px 16px;
+}
+
+.btn-outline-primary {
+    color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+.btn-outline-success {
+    color: #198754;
+    border-color: #198754;
+}
+
+.btn-outline-success:hover {
+    background-color: #198754;
+    color: #fff;
+}
+
+.btn-outline-info {
+    color: #0dcaf0;
+    border-color: #0dcaf0;
+}
+
+.btn-outline-info:hover {
+    background-color: #0dcaf0;
+    color: #fff;
+}
+
+/* ==========================
+   RESOURCE MANAGEMENT SECTION
+   ========================== */
+
+.resource-section {
+    background-color: #198754;
+    color: white;
+    border-radius: 8px;
+    padding: 12px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.resource-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* ==========================
+   ROW LAYOUTS
+   ========================== */
+
+.dashboard-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.dashboard-col {
+    flex: 1 1 300px;
+    max-width: 400px;
+}
+
+/* ==========================
+   RESPONSIVE DESIGN
+   ========================== */
+
+@media (max-width: 768px) {
+    .dashboard-card {
+        padding: 15px;
+    }
+
+    .dashboard-row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .resource-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+

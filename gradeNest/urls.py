@@ -30,6 +30,7 @@ urlpatterns = [
     path('core/', include('core.urls')),
     path('users/', include(('user_management.urls', 'user_management'), namespace='user_management')),     
     path('programs/', include('program_management.urls')),
+    path('resources/', include('resource_management.urls')),
 ] 
 
 if settings.DEBUG:

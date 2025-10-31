@@ -6,6 +6,17 @@
     <h2 class="mb-3">Welcome, {{ request.user.first_name|default:request.user.username }}</h2>
     <h5 class="text-muted">Student Dashboard</h5>
 
+    <!-- Resource Management Section -->
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            My Resources
+        </div>
+        <div class="card-body">
+            <a href="{% url 'resource_management:student_resources' %}" class="btn btn-outline-success mb-2">View Study Materials</a>
+            <a href="{% url 'resource_management:notifications' %}" class="btn btn-outline-info mb-2">View Notifications</a>
+        </div>
+    </div>
+
     <div class="mt-4">
         <h5>Subjects in {{ request.user.userprofile.program.name }}</h5>
         {% if subjects %}

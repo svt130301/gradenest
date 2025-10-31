@@ -6,73 +6,83 @@
     <title>GradeNest | {% block title %}{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'accounts/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'accounts/css/dashboard.css' %}">
 </head>
 <body>
-    <div class="d-flex" id="wrapper">
+<div class="d-flex" id="wrapper">
 
-        <!-- Sidebar -->
-<div class="bg-dark border-right" id="sidebar-wrapper">
-    <div class="sidebar-heading text-white text-center py-3">
-        <h4>GradeNest</h4>
-    </div>
+    <!-- Sidebar -->
+    <div class="bg-dark border-right" id="sidebar-wrapper">
+        <div class="sidebar-heading text-white text-center py-3">
+            <h4>GradeNest</h4>
+        </div>
 
-    <div class="list-group list-group-flush">
-        <!-- Common -->
-        <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action bg-dark text-white">Dashboard</a>
+        <div class="list-group list-group-flush">
+            <!-- Common -->
+            <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action bg-dark text-white">Dashboard</a>
 
-        <!-- Admin Only -->
-        {% if user.userprofile.role == "Admin" and not user.userprofile.is_hod %}
-            <a href="{% url 'user_management:user_list' %}" class="list-group-item list-group-item-action bg-dark text-white">Manage Users</a>
-            <a href="{% url 'program_management:program_list' %}" class="list-group-item list-group-item-action bg-dark text-white">Manage Programs</a>
-            <a href="{% url 'program_management:subject_list' %}" class="list-group-item list-group-item-action bg-dark text-white">Manage Subjects</a>
-        {% endif %}
+            <!-- Admin Only -->
+            {% if user.userprofile.role == "Admin" and not user.userprofile.is_hod %}
+                <a href="{% url 'user_management:user_list' %}" class="list-group-item list-group-item-action bg-dark text-white">Manage Users</a>
+                <a href="{% url 'program_management:program_list' %}" class="list-group-item list-group-item-action bg-dark text-white">Manage Programs</a>
+                <a href="{% url 'program_management:subject_list' %}" class="list-group-item list-group-item-action bg-dark text-white">Manage Subjects</a>
+            {% endif %}
 
-        <!-- HOD Only -->
-        {% if user.userprofile.is_hod %}
-            <a href="{% url 'program_management:assign_faculty_dashboard' %}" class="list-group-item list-group-item-action bg-dark text-white">Assign Faculty</a>
-            <a href="{% url 'program_management:subject_list' %}" class="list-group-item list-group-item-action bg-dark text-white">View Subjects</a>
-        {% endif %}
+            <!-- HOD Only -->
+            {% if user.userprofile.is_hod %}
+                <a href="{% url 'program_management:assign_faculty_dashboard' %}" class="list-group-item list-group-item-action bg-dark text-white">Assign Faculty</a>
+                <a href="{% url 'program_management:subject_list' %}" class="list-group-item list-group-item-action bg-dark text-white">View Subjects</a>
+            {% endif %}
 
-        <!-- Teacher Only -->
-        {% if user.userprofile.role == "Teacher" and not user.userprofile.is_hod %}
-            <a href="#" class="list-group-item list-group-item-action bg-dark text-white">My Subjects</a>
-        {% endif %}
+            <!-- Teacher Only -->
+            {% if user.userprofile.role == "Teacher" and not user.userprofile.is_hod %}
+                <a href="#" class="list-group-item list-group-item-action bg-dark text-white">My Subjects</a>
+                <a href="{% url 'resource_management:upload_question_paper' %}" class="list-group-item list-group-item-action bg-dark text-white">Upload Question Paper</a>
+                <a href="{% url 'resource_management:upload_timetable' %}" class="list-group-item list-group-item-action bg-dark text-white">Upload Timetable</a>
+            {% endif %}
 
-        <!-- Office Staff Only -->
-        {% if user.userprofile.role == "OfficeStaff" %}
-            <a href="{% url 'program_management:program_list' %}" class="list-group-item list-group-item-action bg-dark text-white">Programs</a>
-            <a href="{% url 'program_management:promote_students' %}" class="list-group-item list-group-item-action bg-dark text-white">Promote Students</a>
-        {% endif %}
+            <!-- Office Staff Only -->
+            {% if user.userprofile.role == "OfficeStaff" %}
+                <a href="{% url 'program_management:program_list' %}" class="list-group-item list-group-item-action bg-dark text-white">Programs</a>
+                <a href="{% url 'program_management:promote_students' %}" class="list-group-item list-group-item-action bg-dark text-white">Promote Students</a>
+                <a href="{% url 'resource_management:upload_timetable' %}" class="list-group-item list-group-item-action bg-dark text-white">Upload Timetable</a>
+            {% endif %}
 
-        <!-- Logout -->
-        <a href="{% url 'logout' %}" class="list-group-item list-group-item-action bg-dark text-danger">Logout</a>
-    </div>
-</div>
-v
+            <!-- Student Only -->
+            {% if user.userprofile.role == "Student" %}
+                <a href="{% url 'resource_management:view_question_papers' %}" class="list-group-item list-group-item-action bg-dark text-white">Question Papers</a>
+                <a href="{% url 'resource_management:view_timetables' %}" class="list-group-item list-group-item-action bg-dark text-white">Timetables</a>
+                <a href="{% url 'resource_management:notifications' %}" class="list-group-item list-group-item-action bg-dark text-white">Notifications</a>
+            {% endif %}
 
-        <!-- Page Content -->
-        <div id="page-content-wrapper" class="w-100">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-                <div class="container-fluid">
-                    <span class="navbar-brand mb-0 h5">Welcome, {{ user.username }}</span>
-                </div>
-            </nav>
-
-            <div class="container-fluid mt-4">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-                {% block content %}{% endblock %}
-            </div>
+            <!-- Logout -->
+            <a href="{% url 'logout' %}" class="list-group-item list-group-item-action bg-dark text-danger">Logout</a>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Page Content -->
+    <div id="page-content-wrapper" class="w-100">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <div class="container-fluid">
+                <span class="navbar-brand mb-0 h5">Welcome, {{ user.username }}</span>
+            </div>
+        </nav>
+
+        <div class="container-fluid mt-4">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 

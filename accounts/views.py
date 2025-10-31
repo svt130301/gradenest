@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from user_management.models import Student
 from program_management.models import Program
-from .models import UserProfile, Program, Subject, FacultyAssignment
+from .models import UserProfile, Subject, FacultyAssignment
 
 # -------------------------------
 # LOGIN / LOGOUT / HOME
@@ -36,7 +36,6 @@ def logout_view(request):
 # DASHBOARD
 # -------------------------------
 @login_required
-@login_required
 def dashboard(request):
     user_profile = getattr(request.user, "userprofile", None)
     role = user_profile.role if user_profile else "Unknown"
@@ -46,33 +45,67 @@ def dashboard(request):
         "role": role,
     }
 
-    # Customize dashboard by role
+    # OFFICE STAFF DASHBOARD
     if role == "OfficeStaff":
+        from program_management.models import Program, Department
+        from user_management.models import Student
+
+        departments = Department.objects.all()
         programs = Program.objects.all()
-        students = Student.objects.select_related("program").order_by("program", "semester")
+        selected_program_id = request.GET.get("program")
+        selected_semester = request.GET.get("semester")
+
+        students = Student.objects.select_related("program__department")
+
+        if selected_program_id:
+            students = students.filter(program_id=selected_program_id)
+        if selected_semester:
+            students = students.filter(semester=selected_semester)
+
         context.update({
+            "departments": departments,
             "programs": programs,
             "students": students,
-            "template": "accounts/office_dashboard.html"
+            "selected_program_id": int(selected_program_id) if selected_program_id else None,
+            "selected_semester": selected_semester,
         })
         return render(request, "accounts/office_dashboard.html", context)
 
-    elif user_profile.is_hod:
-        context["template"] = "accounts/hod_dashboard.html"
+
+    # -------------------------------
+    # HOD DASHBOARD
+    # -------------------------------
+    elif user_profile and getattr(user_profile, "is_hod", False):
+        from program_management.models import Department
+        from user_management.models import Staff
+
+        department = Department.objects.filter(hod=user_profile).first()
+        teachers = Staff.objects.filter(department=department)
+
+        context.update({
+            "department": department.name if department else "Not Assigned",
+            "teachers": teachers,
+        })
         return render(request, "accounts/hod_dashboard.html", context)
 
+    # -------------------------------
+    # TEACHER DASHBOARD
+    # -------------------------------
     elif role == "Teacher":
-        context["template"] = "accounts/teacher_dashboard.html"
         return render(request, "accounts/teacher_dashboard.html", context)
 
+    # -------------------------------
+    # ADMIN DASHBOARD
+    # -------------------------------
     elif role == "Admin":
-        context["template"] = "accounts/admin_dashboard.html"
         return render(request, "accounts/admin_dashboard.html", context)
 
+    # -------------------------------
+    # STUDENT DASHBOARD
+    # -------------------------------
     else:
-        # Student
-        context["template"] = "accounts/student_dashboard.html"
         return render(request, "accounts/student_dashboard.html", context)
+
 
 # -------------------------------
 # PROGRAM MANAGEMENT (Admin)
@@ -81,6 +114,7 @@ def dashboard(request):
 def program_list(request):
     programs = Program.objects.all()
     return render(request, 'accounts/program_list.html', {'programs': programs})
+
 
 @login_required
 def add_program(request):
@@ -94,12 +128,14 @@ def add_program(request):
         form = ProgramForm()
     return render(request, 'accounts/add_program.html', {'form': form})
 
+
 @login_required
 def delete_program(request, program_id):
     program = get_object_or_404(Program, id=program_id)
     program.delete()
     messages.success(request, 'Program deleted successfully.')
     return redirect('program_list')
+
 
 # -------------------------------
 # SUBJECT MANAGEMENT (Admin)
@@ -130,11 +166,10 @@ def delete_subject(request, subject_id):
     messages.success(request, 'Subject deleted successfully.')
     return redirect('subject_list')
 
+
 # -------------------------------
 # FACULTY ASSIGNMENT (HOD only)
 # -------------------------------
-from .models import FacultyAssignment, Subject, Program, UserProfile
-
 @login_required
 def assign_faculty(request):
     """Allow HODs to assign teachers to subjects"""
@@ -147,6 +182,7 @@ def assign_faculty(request):
 
     program = user_profile.program
 
+    # Ensure valid program reference
     if not isinstance(program, Program):
         try:
             program = Program.objects.get(name=program)
@@ -176,6 +212,6 @@ def assign_faculty(request):
     return render(request, 'accounts/assign_faculty.html', {
         'program': program,
         'subjects': subjects,
-        'teachers': teachers
+        'teachers': teachers,
     })
 
