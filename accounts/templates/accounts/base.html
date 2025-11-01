@@ -46,6 +46,11 @@
                 <a href="{% url 'program_management:program_list' %}" class="list-group-item list-group-item-action bg-dark text-white">Programs</a>
                 <a href="{% url 'program_management:promote_students' %}" class="list-group-item list-group-item-action bg-dark text-white">Promote Students</a>
                 <a href="{% url 'resource_management:upload_timetable' %}" class="list-group-item list-group-item-action bg-dark text-white">Upload Timetable</a>
+                <li class="nav-item">
+  <a class="nav-link" href="{% url 'marks_management:select_program_semester' %}">
+    <i class="fa fa-file-alt me-2"></i> University Marks Entry
+  </a>
+</li>
             {% endif %}
 
             <!-- Student Only -->

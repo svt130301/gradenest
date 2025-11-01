@@ -1,0 +1,68 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+
+{% block title %}Enter External Marks{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Enter External Marks</h5>
+            <small>{{ program.name }} – Semester {{ semester }}{% if academic_year %} ({{ academic_year }}){% endif %}</small>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Student</th>
+                                {% for subject in subjects %}
+                                    <th>{{ subject.name }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in students %}
+                                <tr>
+                                    <td class="fw-semibold">{{ student.user.first_name }} {{ student.user.last_name }}</td>
+                                    {% for subject in subjects %}
+                                        <td>
+                                            <div class="d-flex flex-column">
+                                                <input 
+                                                    type="number" 
+                                                    name="marks_{{ student.id }}_{{ subject.id }}" 
+                                                    class="form-control mb-1" 
+                                                    placeholder="Marks"
+                                                    min="0" 
+                                                    max="100"
+                                                    required
+                                                >
+                                                <!--<select 
+                                                    name="pass_{{ student.id }}_{{ subject.id }}" 
+                                                    class="form-select"
+                                                    required
+                                                >
+                                                    <option value="">--Status--</option>
+                                                    <option value="Pass">Pass</option>
+                                                    <option value="Fail">Fail</option>
+                                                </select>-->
+                                            </div>
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-end">
+                    <button type="submit" class="btn btn-success px-4">Save Marks</button>
+                    <a class="btn btn-outline-primary ms-2" href="{% url 'marks_management:view_external_results' program_id=program.id semester=semester %}{% if admission_year %}?admission_year={{ admission_year }}{% endif %}">View Semester Results</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

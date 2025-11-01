@@ -31,6 +31,7 @@ urlpatterns = [
     path('users/', include(('user_management.urls', 'user_management'), namespace='user_management')),     
     path('programs/', include('program_management.urls')),
     path('resources/', include('resource_management.urls')),
+    path('marks/', include('marks_management.urls')),
 ] 
 
 if settings.DEBUG:

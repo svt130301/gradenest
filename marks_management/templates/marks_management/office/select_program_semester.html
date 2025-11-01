@@ -1,0 +1,36 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+
+{% block title %}Select Program & Semester{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Select Program and Semester</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" class="mt-3">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            {{ form.program.label_tag }}
+            {{ form.program }}
+        </div>
+        <div class="col-md-4 mb-3">
+            {{ form.semester.label_tag }}
+            {{ form.semester }}
+        </div>
+        <div class="col-md-4 mb-3">
+            {{ form.academic_year.label_tag }}
+            {{ form.academic_year }}
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Next</button>
+</form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+

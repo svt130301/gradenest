@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Semester Results{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">{{ program.name }} — Semester {{ semester }} Results</h5>
+      {% if admission_year %}<small>{{ admission_year }}</small>{% endif %}
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th>Roll</th>
+            <th>Student</th>
+            <th>Total Marks</th>
+            <th>Percentage</th>
+            <th>SGPA</th>
+            <th>CGPA</th>
+            <th>Grade</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in results %}
+            <tr>
+              <td>{{ r.student.roll_number }}</td>
+              <td>{{ r.student.user.get_full_name }}</td>
+              <td>{{ r.total_marks }}</td>
+              <td>{{ r.percentage|floatformat:2 }}</td>
+              <td>{{ r.sgpa|floatformat:2 }}</td>
+              <td>{{ r.cgpa|floatformat:2 }}</td>
+              <td>{{ r.overall_grade }}</td>
+              <td>{{ r.pass_fail }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="8" class="text-center">No results found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="d-flex justify-content-end">
+        <a href="{% url 'marks_management:enter_external_marks' program_id=program.id semester=semester %}" class="btn btn-secondary me-2">Back to Entry</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
