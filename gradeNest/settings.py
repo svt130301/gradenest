@@ -80,17 +80,20 @@ WSGI_APPLICATION = 'gradeNest.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 import os
+from pathlib import Path
 
-# --- Database Setup (Shared Google Drive Path) ---
-GOOGLE_DRIVE_DB_PATH = "/home/student/Google Drive/GradeNest_DB/db.sqlite3"
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-# If the shared DB exists, use it; otherwise fall back to local db.sqlite3
-DATABASE_PATH = GOOGLE_DRIVE_DB_PATH if os.path.exists(GOOGLE_DRIVE_DB_PATH) else BASE_DIR / "db.sqlite3"
+# Path on your machine where your Drive is mounted
+SHARED_DB_PATH = "/home/student/Drive/GradeNest_DB/db.sqlite3"
+
+# Use shared DB if present, otherwise fall back to project-local db.sqlite3
+DATABASE_PATH = SHARED_DB_PATH if os.path.exists(SHARED_DB_PATH) else str(BASE_DIR / "db.sqlite3")
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': DATABASE_PATH,
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": DATABASE_PATH,
     }
 }
 

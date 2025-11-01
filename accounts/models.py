@@ -41,10 +41,12 @@ class UserProfile(models.Model):
     phone_number = models.CharField(max_length=15, null=True, blank=True)
     photo = models.ImageField(upload_to='photos/', null=True, blank=True)
     identification_document = models.FileField(upload_to='documents/', null=True, blank=True)
-    is_hod = models.BooleanField(default=False)  # used by "Make HOD" button
+    is_hod = models.BooleanField(default=False)
+    current_semester = models.PositiveIntegerField(default=1) 
 
     def __str__(self):
         return f"{self.user.username} ({self.role})"
+
 
 
 
